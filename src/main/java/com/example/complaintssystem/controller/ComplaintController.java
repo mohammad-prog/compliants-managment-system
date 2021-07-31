@@ -1,7 +1,9 @@
 package com.example.complaintssystem.controller;
 
 import com.example.complaintssystem.Complaint;
+import com.example.complaintssystem.repository.ComplaintRepository;
 import com.example.complaintssystem.repository.JdbcComplaintRepository;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.*;
 
 
@@ -10,7 +12,11 @@ import java.util.List;
 @RestController
 @RequestMapping(value = "/Api/v1/complaint")
 public class ComplaintController {
-    private JdbcComplaintRepository complaintRepository = new JdbcComplaintRepository();
+    private ComplaintRepository complaintRepository ;
+
+    public ComplaintController(ComplaintRepository complaintRepository) {
+        this.complaintRepository = complaintRepository;
+    }
 
     @GetMapping("/listAllComplaints")
     public List<Complaint> listAllComplaints() {

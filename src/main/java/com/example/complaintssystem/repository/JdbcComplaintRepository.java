@@ -2,27 +2,36 @@ package com.example.complaintssystem.repository;
 
 import com.example.complaintssystem.Complaint;
 import com.example.complaintssystem.repository.ComplaintRepository;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
+@Component
 public class JdbcComplaintRepository implements ComplaintRepository {
 
+    private String driverClass;
+    private String url;
+    private String username;
+    private String password;
+
+    public JdbcComplaintRepository(@Value("database.driverClass") String driverClass,
+                                   @Value("database.url") String url,
+                                   @Value("database.username") String username,
+                                   @Value("database.password") String password) {
+        this.driverClass = driverClass;
+        this.url = url;
+        this.username = username;
+        this.password = password;
+    }
 
     @Override
     public void createComplaint(Complaint complaint) {
         try {
-            Class.forName("oracle.jdbc.driver.OracleDriver");
-            Connection con = DriverManager.getConnection(
-                    "jdbc:oracle:thin:@ (DESCRIPTION =\n" +
-                            "    (ADDRESS = (PROTOCOL = TCP)(HOST = localhost)(PORT = 1521))\n" +
-                            "    (CONNECT_DATA =\n" +
-                            "      (SERVER = DEDICATED)\n" +
-                            "      (SERVICE_NAME = orclpdb)\n" +
-                            "    )\n" +
-                            "  )", "system", "orcl");
-
+            Class.forName(driverClass);
+            Connection con = DriverManager.getConnection(url, username, password);
 
             Statement stmt = con.createStatement();
 
@@ -48,15 +57,8 @@ public class JdbcComplaintRepository implements ComplaintRepository {
 
         List<Complaint> complaints = new ArrayList<>();
         try {
-            Class.forName("oracle.jdbc.driver.OracleDriver");
-            Connection con = DriverManager.getConnection(
-                    "jdbc:oracle:thin:@ (DESCRIPTION =\n" +
-                            "    (ADDRESS = (PROTOCOL = TCP)(HOST = localhost)(PORT = 1521))\n" +
-                            "    (CONNECT_DATA =\n" +
-                            "      (SERVER = DEDICATED)\n" +
-                            "      (SERVICE_NAME = orclpdb)\n" +
-                            "    )\n" +
-                            "  )", "system", "orcl");
+            Class.forName(driverClass);
+            Connection con = DriverManager.getConnection(url, username, password);
             Statement stmt = con.createStatement();
             PreparedStatement query = con.prepareStatement(
                     "select * from complaints WHERE author=?");
@@ -89,15 +91,8 @@ public class JdbcComplaintRepository implements ComplaintRepository {
     @Override
     public void changeStatus(Complaint complaint) {
         try {
-            Class.forName("oracle.jdbc.driver.OracleDriver");
-            Connection con = DriverManager.getConnection(
-                    "jdbc:oracle:thin:@ (DESCRIPTION =\n" +
-                            "    (ADDRESS = (PROTOCOL = TCP)(HOST = localhost)(PORT = 1521))\n" +
-                            "    (CONNECT_DATA =\n" +
-                            "      (SERVER = DEDICATED)\n" +
-                            "      (SERVICE_NAME = orclpdb)\n" +
-                            "    )\n" +
-                            "  )", "system", "orcl");
+            Class.forName(driverClass);
+            Connection con = DriverManager.getConnection(url, username, password);
 
 
             Statement stmt = con.createStatement();
@@ -122,17 +117,8 @@ public class JdbcComplaintRepository implements ComplaintRepository {
         List<Complaint> complaints = new ArrayList<>();
         try {
 
-            Class.forName("oracle.jdbc.driver.OracleDriver");
-
-            Connection con = DriverManager.getConnection(
-                    "jdbc:oracle:thin:@ (DESCRIPTION =\n" +
-                            "    (ADDRESS = (PROTOCOL = TCP)(HOST = localhost)(PORT = 1521))\n" +
-                            "    (CONNECT_DATA =\n" +
-                            "      (SERVER = DEDICATED)\n" +
-                            "      (SERVICE_NAME = orclpdb)\n" +
-                            "    )\n" +
-                            "  )", "system", "orcl");
-
+            Class.forName(driverClass);
+            Connection con = DriverManager.getConnection(url, username, password);
 
             Statement stmt = con.createStatement();
             ResultSet rs = stmt.executeQuery("select * from complaints");
